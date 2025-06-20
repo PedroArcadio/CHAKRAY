@@ -1,7 +1,9 @@
 package com.api.examen.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class User {
     private String email;
     @Column(name = "NAME")
     private String name;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "PASSWORD")
     private String password;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")

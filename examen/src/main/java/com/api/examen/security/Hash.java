@@ -8,13 +8,13 @@ public class Hash {
 
     public static String SHA1(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            byte[] result = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : result) {
-                sb.append(String.format("%02x", b));
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                hexString.append(String.format("%02x", b));
             }
-            return sb.toString();
+            return hexString.toString();
         } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException("Error al generar hash SHA-1", ex);
         }
