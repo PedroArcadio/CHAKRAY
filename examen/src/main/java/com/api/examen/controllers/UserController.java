@@ -41,7 +41,7 @@ public class UserController {
                 return new ResponseEntity<>(ApiResponse.ok(users, uuid), HttpStatus.OK);
             }
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,7 +72,7 @@ public class UserController {
                 return new ResponseEntity<>(ApiResponse.ok(addresses, uuid), HttpStatus.OK);
             }
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -99,7 +99,7 @@ public class UserController {
             addressRepository.save(existingAddress);
             return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.OK);
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -122,7 +122,7 @@ public class UserController {
             return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.CREATED);
 
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -150,7 +150,7 @@ public class UserController {
                 return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.OK);
             }
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -167,7 +167,7 @@ public class UserController {
                 return new ResponseEntity<>(ApiResponse.badRequest(details, uuid), HttpStatus.BAD_REQUEST); // No existe el usuario
             }
         } catch (Exception ex) {
-            List<String> details = Arrays.asList("Error interno del servidor", "Por favor intente más tarde");
+            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "92a2d837-fdc2-4cf6-bffd-ffb1e41e1970",
+		"name": "CHAKRAY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45553753",
+		"_collection_link": "https://pedroarcadio.postman.co/workspace/WorkStation~c238d76d-7309-4121-8438-76005eb2b797/collection/45553753-92a2d837-fdc2-4cf6-bffd-ffb1e41e1970?action=share&source=collection_link&creator=45553753"
+	},
+	"item": [
+		{
+			"name": "AllUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users?sortedBy=id&order=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "sortedBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressesByUserId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users/1/addresses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users",
+						"1",
+						"addresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressesByUserId",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Casa\",\r\n    \"street\": \"Mar Hudson\",\r\n    \"country_code\": \"7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users/1/addresses/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users",
+						"1",
+						"addresses",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"name\": \"Juan Pérez\",\r\n  \"password\": \"1234\",\r\n  \"addresses\": [\r\n    {\r\n      \"name\": \"Casa\",\r\n      \"street\": \"Calle 123\",\r\n      \"country_code\": \"MX\"\r\n    },\r\n    {\r\n      \"name\": \"Oficina\",\r\n      \"street\": \"Av. Reforma\",\r\n      \"country_code\": \"MX\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"name\": \"Juan Pérez\",\r\n  \"password\": \"1234\",\r\n  \"addresses\": [\r\n    {\r\n      \"name\": \"Casa\",\r\n      \"street\": \"Calle 123\",\r\n      \"country_code\": \"MX\"\r\n    },\r\n    {\r\n      \"name\": \"Oficina\",\r\n      \"street\": \"Av. Reforma\",\r\n      \"country_code\": \"MX\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/chakray/spring-boot/v1/users/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chakray",
+						"spring-boot",
+						"v1",
+						"users",
+						"7"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

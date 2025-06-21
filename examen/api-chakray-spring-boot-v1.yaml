@@ -1,0 +1,504 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "USUARIOS CHAKRAY"
+  description: |
+    API capaz de realizar las siguientes operaciones:
+    * Listar todos los usuarios y ordenarlos por alguno de sus campos tanto ascedente como descendente.
+    * Listar las direcciones por el id del usuario.
+    * Actualizar una dirección del usuario por medio del id del usuario e id de la dirección.
+    * Agregar un nuevo usuario.
+    * Actualuzar un campo del usuario por medio de su id.
+    * Eliminar un usuario por medio de su id.
+
+host: 127.0.0.1:8080
+basePath: "/chakray/spring-boot/v1"
+schemes:
+  - "http"
+  - "https"
+produces:
+  - "application/json"
+securityDefinitions:
+  Bearer:
+    description: |
+      Para acceder a la API se debe pasar un token válido en todas las consultas.
+      La siguiente sintaxis se debe utilizar en el encabezado 'Authorization':
+      Bearer: 2zzLJmBAtTNIU8nF8e8XbmDvaNGs
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+security:
+  - Bearer: []
+
+paths:
+  "/users":
+    get:
+      summary: "Listar todos los usuarios y ordenarlos por alguno de sus campos tanto ascedente como descendente."
+      description: |
+        Listar todos los usuarios y ordenarlos por alguno de sus campos tanto ascedente como descendente.
+      tags:
+        - "User"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "sortedBy"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "email"
+            - "id"
+            - "name"
+            - "created_at"
+        - name: "order"
+          in: "query"
+          required: false
+          type: "string"
+          default: "asc"
+          enum:
+            - "asc"
+            - "desc"
+      responses:
+        200:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/get-user-response"
+        404:
+          description: "Información no encontrada"
+          schema:
+            $ref: "#/definitions/information-not-found"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+    # --------------------------------------------------------------------
+    post:
+      summary: "Agregar un nuevo usuario."
+      description: |
+        Agregar un nuevo usuario.
+      tags:
+        - "User"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "body"
+          description: "Objeto JSON con las propiedades a guardar para el nuevo usuario."
+          required: true
+          in: "body"
+          schema:
+            $ref: "#/definitions/user-request"
+      responses:
+        201:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/ok-response"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+  # --------------------------------------------------------------------
+  "/users/{user_id}/addresses":
+    get:
+      summary: "Listar las direcciones por el id del usuario."
+      description: |
+        Listar las direcciones por el id del usuario.
+      tags:
+        - "User"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "user_id"
+          in: "path"
+          description: "Id del usuario al que se le consultarán sus direcciones."
+          required: true
+          type: "integer"
+          default: 1
+      responses:
+        200:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/get-addresses-response"
+        404:
+          description: "Información no encontrada"
+          schema:
+            $ref: "#/definitions/information-not-found"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+  # --------------------------------------------------------------------
+  "/users/{user_id}/addresses/{address_id}":
+    put:
+      summary: "Actualizar una dirección del usuario por medio del id del usuario e id de la dirección."
+      description: |
+        Actualizar una dirección del usuario por medio del id del usuario e id de la dirección.
+      tags:
+        - "User"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "user_id"
+          description: "Id del usuario al que se le actualizará su dirección."
+          required: true
+          in: "path"
+          type: "integer"
+          default: 1
+        - name: "address_id"
+          description: "Id de la dirección a actualizar."
+          required: true
+          in: "path"
+          type: "integer"
+          default: 1
+        - name: "body"
+          description: "Objeto JSON con las propiedades a actualizar para la dirección."
+          required: true
+          in: "body"
+          schema:
+            $ref: "#/definitions/address-request"
+      responses:
+        200:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/ok-response"
+        404:
+          description: "Información no encontrada"
+          schema:
+            $ref: "#/definitions/information-not-found"
+        400:
+          description: "Solicitud inválida"
+          schema:
+            $ref: "#/definitions/invalid-request"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+  # --------------------------------------------------------------------
+  "/users/{id}":
+    delete:
+      summary: "Eliminar un usuario por medio de su id."
+      description: |
+        Eliminar un usuario por medio de su id.
+      tags:
+        - "User"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id del usuario que se eliminará"
+          required: true
+          type: "integer"
+          default: 1
+      responses:
+        200:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/ok-response"
+        400:
+          description: "Solicitud inválida"
+          schema:
+            $ref: "#/definitions/invalid-request"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+    # --------------------------------------------------------------------
+    patch:
+      summary: "Actualuzar un campo del usuario por medio de su id."
+      description: |
+        Actualuzar un campo del usuario por medio de su id.
+      tags:
+        - "User"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id del usuario que se actualizará algún campo."
+          required: true
+          type: "integer"
+          default: 1
+        - name: "body"
+          description: "Objeto JSON con las propiedades a actualizar para la dirección."
+          required: true
+          in: "body"
+          schema:
+            $ref: "#/definitions/user-patch-request"
+      responses:
+        200:
+          description: "Operación Exitosa"
+          schema:
+            $ref: "#/definitions/ok-response"
+        404:
+          description: "Información no encontrada"
+          schema:
+            $ref: "#/definitions/information-not-found"
+        500:
+          description: "Error interno del servidor"
+          schema:
+            $ref: "#/definitions/internal-server-error"
+  # --------------------------------------------------------------------
+
+definitions:
+  # --------------------------------------------------------------------
+  get-user-response:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Mensaje de operación exitosa."
+        example: "Operación Exitosa"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "05a1d1c8-398c-4c3d-bd07-7cf05a8e5b02"
+      result:
+        type: "object"
+        description: "Respuesta de la solicitud de listar usuarios."
+        properties:
+          records:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Clave primaria que identifica al id del registro."
+                  example: 1
+                email:
+                  type: "string"
+                  description: "Email del usuario"
+                  example: "pedro.arcadio.dev@gmail.com"
+                name:
+                  type: "string"
+                  description: "Nombre del usuario."
+                  example: "Pedro Arcadio Dionicio"
+                created_at:
+                  type: "string"
+                  description: "Atributo de tiempo actual en la zona horaria del Reino Unido en formato dd-mm-aaaa HH:mm:ss."
+                  example: "01-01-2024 00:00:00"
+                addresses:
+                  type: "array"
+                  items:
+                    type: "object"
+                    properties:
+                      id:
+                        type: "integer"
+                        description: "Clave primaria que identifica al id del registro."
+                        example: 1
+                      name:
+                        type: "string"
+                        description: "Nombre de la dirección."
+                        example: "Casa"
+                      street:
+                        type: "string"
+                        description: "Nombre de la calle."
+                        example: "Calle 123"
+                      country_code:
+                        type: "string"
+                        description: "Código del país."
+                        example: "MX"
+  # --------------------------------------------------------------------
+  address-request:
+    type: "object"
+    required:
+      - "name"
+      - "street"
+      - "country_code"
+    properties:
+      name:
+        type: "string"
+        description: "Nombre de la dirección."
+        example: "Casa"
+      street:
+        type: "string"
+        description: "Nombre de la calle."
+        example: "Calle 123"
+      country_code:
+        type: "string"
+        description: "Código del país."
+        example: "MX"
+  # --------------------------------------------------------------------
+  get-addresses-response:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Mensaje de operación exitosa."
+        example: "Operación Exitosa"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "05a1d1c8-398c-4c3d-bd07-7cf05a8e5b02"
+      result:
+        type: "object"
+        description: "Respuesta de la solicitud de listar direcciones."
+        properties:
+          records:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Clave primaria que identifica al id del registro."
+                  example: 1
+                name:
+                  type: "string"
+                  description: "Nombre de la dirección."
+                  example: "Casa"
+                street:
+                  type: "string"
+                  description: "Nombre de la calle."
+                  example: "Calle 123"
+                country_code:
+                  type: "string"
+                  description: "Código del país."
+                  example: "MX"
+  # --------------------------------------------------------------------
+  ok-response:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Mensaje de operación exitosa."
+        example: "Operación Exitosa"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "05a1d1c8-398c-4c3d-bd07-7cf05a8e5b02"
+  # --------------------------------------------------------------------
+  user-request:
+    type: "object"
+    required:
+      - "email"
+      - "name"
+      - "password"
+      - "addresses"
+    properties:
+      email:
+        type: "string"
+        description: "Email del usuario."
+        example: "pedro.arcadio.dev@gmail.com"
+      name:
+        type: "string"
+        description: "Nombre del usuario."
+        example: "Pedro Arcadio Dionicio"
+      password:
+        type: "string"
+        description: "Contraseña del usuario del lado de la API se cifra mediante el algoritmo SHA-1"
+        example: "Pedro_1"
+      addresses:
+        type: "array"
+        items:
+          type: "object"
+          required:
+            - "id"
+            - "name"
+            - "street"
+            - "country_code"
+          properties:
+            id:
+              type: "integer"
+              description: "Clave primaria que identifica al id del registro."
+              example: 1
+            name:
+              type: "string"
+              description: "Nombre de la dirección."
+              example: "Casa"
+            street:
+              type: "string"
+              description: "Nombre de la calle."
+              example: "Calle 123"
+            country_code:
+              type: "string"
+              description: "Código del país."
+              example: "MX"
+  # --------------------------------------------------------------------
+  user-patch-request:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Email del usuario."
+        example: "pedro.arcadio.dev@gmail.com"
+      name:
+        type: "string"
+        description: "Nombre del usuario."
+        example: "Pedro Arcadio Dionicio"
+      password:
+        type: "string"
+        description: "Contraseña del usuario del lado de la API se cifra mediante el algoritmo SHA-1"
+        example: "Pedro_1"
+  # --------------------------------------------------------------------
+  information-not-found:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Código de respuesta HTTP Not Found."
+        example: "404.chakray-examen.4040"
+      message:
+        type: "string"
+        description: "Mensaje de Información no encontrada."
+        example: "Información no encontrada"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "0c1ad42f-fd76-4f76-98b9-db655e5c601f"
+      details:
+        type: "array"
+        description: "Muestra información detallada del error."
+        items:
+          type: "string"
+          example: "No se encontro informacion para la combinación de parametros indicada"
+  # --------------------------------------------------------------------
+  invalid-request:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Código de respuesta HTTP Bad Request"
+        example: "400.chakray-examen.4000"
+      message:
+        type: "string"
+        description: "Mensaje de Solicitud inválida."
+        example: "Petición no válida, favor de validar su información"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "1b82f14e-f789-4e9b-b792-0ba06bc7fcfb"
+      details:
+        type: "array"
+        description: "Muestra informacion detallada del error."
+        items:
+          type: "string"
+          example: "No se pudo ejecutar de manera correcta su petición"
+  # --------------------------------------------------------------------
+  internal-server-error:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Código de respuesta HTTP Internal Server Error."
+        example: "500.chakray-examen.5000"
+      message:
+        type: "string"
+        description: "Mensaje de Error interno del servidor."
+        example: "Error Interno del Servidor"
+      folio:
+        type: "string"
+        description: "Folio generado por la petición."
+        example: "0c1ad42f-fd76-4f76-98b9-db655e5c601f"
+      details:
+        type: "array"
+        description: "Muestra informacion detallada del error"
+        items:
+          type: "string"
+          example: "No se pudo establecer la conexión a la base de datos"
