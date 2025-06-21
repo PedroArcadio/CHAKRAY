@@ -1,4 +1,4 @@
-package com.api.examen.models;
+package com.api.examen.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

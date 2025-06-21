@@ -2,7 +2,7 @@ package com.api.examen.utils;
 
 import java.util.*;
 
-public final class ApiResponse {
+public class ApiResponse {
 
     public static Map<String, Object> internalServerError(List<String> details, UUID folio) {
         Map<String, Object> response = new HashMap<>();

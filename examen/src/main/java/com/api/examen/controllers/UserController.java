@@ -1,9 +1,8 @@
 package com.api.examen.controllers;
 
-import com.api.examen.models.Address;
-import com.api.examen.models.User;
-import com.api.examen.repository.AddressRepository;
-import com.api.examen.repository.UserRepository;
+import com.api.examen.entities.Address;
+import com.api.examen.entities.User;
+import com.api.examen.services.UserService;
 import com.api.examen.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,19 +14,18 @@ import java.util.*;
 import com.api.examen.security.Hash;
 
 @RestController
-@RequestMapping(value = "/chakray/spring-boot/v1")
+@RequestMapping(value = "${api.base.url}")
 public class UserController {
 
+
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AddressRepository addressRepository;
+    private UserService userService;
 
     @GetMapping(value = "/users")
     public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam(required = false) String sortedBy, @RequestParam(required = false, defaultValue = "asc") String order) {
         UUID uuid = UUID.randomUUID();
         try {
-            List<User> users = userRepository.findAll();
+            List<User> users = userService.findAll();
             if (users.isEmpty()) {
                 return new ResponseEntity<>(ApiResponse.notFound(uuid), HttpStatus.NOT_FOUND);
             } else {
@@ -41,15 +39,13 @@ public class UserController {
                 return new ResponseEntity<>(ApiResponse.ok(users, uuid), HttpStatus.OK);
             }
         } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
+            List<String> details = List.of("No se pudo establecer conexión con el servicio");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     private Comparator<User> getComparator(String sortedBy) {
         switch (sortedBy) {
-            case "id":
-                return Comparator.comparing(User::getId);
             case "name":
                 return Comparator.comparing(User::getName);
             case "email":
@@ -57,72 +53,30 @@ public class UserController {
             case "created_at":
                 return Comparator.comparing(User::getCreated_at);
             default:
-                return Comparator.comparing(User::getId); // Por defecto
+                return Comparator.comparing(User::getId);
         }
     }
 
-    @GetMapping(value = "/users/{user_id}/addresses")
-    public ResponseEntity<Map<String, Object>> getAddressesByUserId(@PathVariable("user_id") int user_id) {
-        UUID uuid = UUID.randomUUID();
-        try {
-            List<Address> addresses = addressRepository.findByUserId(user_id);
-            if (addresses.isEmpty()) {
-                return new ResponseEntity<>(ApiResponse.notFound(uuid), HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity<>(ApiResponse.ok(addresses, uuid), HttpStatus.OK);
-            }
-        } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
-            return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping(value = "/users/{user_id}/addresses/{address_id}")
-    public ResponseEntity<Map<String, Object>> updateAddressByUserId(@PathVariable("user_id") int user_id, @PathVariable("address_id") int address_id, @RequestBody Address address) {
-        UUID uuid = UUID.randomUUID();
-        try {
-            // Buscar la dirección
-            Address existingAddress = addressRepository.findById(address_id).orElse(null);
-            if (existingAddress == null) {
-                return new ResponseEntity<>(ApiResponse.notFound(uuid), HttpStatus.NOT_FOUND);
-            }
-            // Verificar que la dirección pertenece al usuario
-            if (existingAddress.getUser() == null || existingAddress.getUser().getId() != user_id) {
-                List<String> details = List.of("No se pudo ejecutar de manera correcta su petición");
-                return new ResponseEntity<>(ApiResponse.badRequest(details, uuid), HttpStatus.BAD_REQUEST);
-            }
-            // Actualizar campos permitidos
-            existingAddress.setName(address.getName());
-            existingAddress.setStreet(address.getStreet());
-            existingAddress.setCountry_code(address.getCountry_code());
-            // Guardar cambios
-            addressRepository.save(existingAddress);
-            return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.OK);
-        } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
-            return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PostMapping(value = "/users")
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
         UUID uuid = UUID.randomUUID();
         try {
-            // Hashear la contraseña
+            // Hashea la contraseña
             String hashedPassword = Hash.SHA1(user.getPassword());
             user.setPassword(hashedPassword);
-            // Establecer la relación bidireccional de direcciones
+            // Establece la relación bidireccional de direcciones del nuevo usuario
             if (user.getAddresses() != null) {
                 for (Address address : user.getAddresses()) {
                     address.setUser(user);
                 }
             }
-            // Guardar el usuario
-            userRepository.save(user);
+            // Guarda el registro
+            userService.save(user);
             return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.CREATED);
 
         } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
+            List<String> details = List.of("No se pudo establecer conexión con el servicio");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -131,7 +85,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> patchUser(@PathVariable("id") int id, @RequestBody User updatedUser) {
         UUID uuid = UUID.randomUUID();
         try {
-            Optional<User> optionalUser = userRepository.findById(id);
+            Optional<User> optionalUser = userService.findById(id);
             if (optionalUser.isEmpty()) {
                 return new ResponseEntity<>(ApiResponse.notFound(uuid), HttpStatus.NOT_FOUND);
             } else {
@@ -146,11 +100,11 @@ public class UserController {
                 if (updatedUser.getPassword() != null) {
                     user.setPassword(Hash.SHA1(updatedUser.getPassword()));
                 }
-                userRepository.save(user);
+                userService.save(user);
                 return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.OK);
             }
         } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
+            List<String> details = List.of("No se pudo establecer conexión con el servicio");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -159,15 +113,15 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("id") int id) {
         UUID uuid = UUID.randomUUID();
         try {
-            if (userRepository.existsById(id)) {
-                userRepository.deleteById(id);
+            if (userService.existsById(id)) {
+                userService.deleteById(id);
                 return new ResponseEntity<>(ApiResponse.ok(null, uuid), HttpStatus.OK); // Eliminado con éxito
             } else {
                 List<String> details = List.of("No se pudo ejecutar de manera correcta su petición");
                 return new ResponseEntity<>(ApiResponse.badRequest(details, uuid), HttpStatus.BAD_REQUEST); // No existe el usuario
             }
         } catch (Exception ex) {
-            List<String> details = List.of("No se pudo establecer la conexión a la base de datos");
+            List<String> details = List.of("No se pudo establecer conexión con el servicio");
             return new ResponseEntity<>(ApiResponse.internalServerError(details, uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -105,7 +105,7 @@ paths:
       description: |
         Listar las direcciones por el id del usuario.
       tags:
-        - "User"
+        - "Address"
       produces:
         - "application/json"
       parameters:
@@ -135,7 +135,7 @@ paths:
       description: |
         Actualizar una dirección del usuario por medio del id del usuario e id de la dirección.
       tags:
-        - "User"
+        - "Address"
       consumes:
         - "application/json"
       produces:
@@ -501,4 +501,4 @@ definitions:
         description: "Muestra informacion detallada del error"
         items:
           type: "string"
-          example: "No se pudo establecer la conexión a la base de datos"
+          example: "No se pudo establecer conexión con el servicio"
