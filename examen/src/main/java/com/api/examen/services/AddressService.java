@@ -19,7 +19,7 @@ public class AddressService {
     }
 
     public List<Address> findAllAddressById(int userId) {
-        return addressRepository.findAllAddressById(userId);
+        return addressRepository.findByUserId(userId);
     }
 
     public Optional<Address> findById(int addressId) {

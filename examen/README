@@ -1,0 +1,33 @@
+# CHAKRAY - Microservicio Spring Boot
+
+Este proyecto es un microservicio desarrollado con Spring Boot que expone varios endpoints documentados con Swagger y puede ejecutarse localmente o mediante Docker.
+
+Puedes clonar o consultar el proyecto directamente desde:
+
+https://github.com/PedroArcadio/CHAKRAY.git
+
+## Contenido del repositorio
+
+- 🟦 `api-chakray-spring-boot-v1.yaml`: Archivo Swagger que documenta todos los endpoints del microservicio.
+- 🟨 `CHAKRAY.postman_collection.json`: Colección de Postman para probar los endpoints definidos.
+- 🟥 `chakray.sql`: Script SQL para crear la base de datos y las tablas en SQL Server.
+- 🟧 `Dockerfile`: Archivo que define cómo construir la imagen Docker del microservicio.
+- 🧪 Carpeta `test/`: Contiene las clases con pruebas unitarias del microservicio.
+- ⚙️ `application.properties`: Archivo con los datos de configuración para ejecutar el proyecto localmente desde IntelliJ.
+- 🐳 `docker-compose.yml`: Define la configuración para levantar el contenedor Docker con la conexión a la base de datos.
+
+## Configuración
+
+🔐 **Importante:**
+Debes actualizar los valores de usuario y contraseña de SQL Server para poder conectarte correctamente a la base de datos. Esto se debe hacer en:
+
+- `application.properties`, si ejecutas el proyecto desde IntelliJ.
+- `docker-compose.yml`, si lo ejecutas en Docker.
+
+## Ejecución con Docker
+
+Una vez configurada la conexión, puedes construir la imagen y levantar el contenedor con el siguiente comando:
+
+docker-compose up --build
+
+Una vez creada la imagen y el contenedor en Docker o localmente con IntelliJ ya es posible realizar las pruebas

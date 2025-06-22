@@ -41,7 +41,7 @@ class AddressControllerTest {
 
     @Test
     void getAddressesByUserId200() throws Exception {
-        int existingUserId = 45; // Asegurar que este usuario tenga direcciones en la BD
+        int existingUserId = 53; // Asegurar que este usuario tenga direcciones en la BD
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL + "/users/" + existingUserId + "/addresses").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         assertEquals(200, result.getResponse().getStatus());

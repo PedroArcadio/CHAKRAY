@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    image: spring-boot-examen
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: APArcadio_295
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://host.docker.internal:1433;databaseName=chakray;encrypt=true;trustServerCertificate=true
