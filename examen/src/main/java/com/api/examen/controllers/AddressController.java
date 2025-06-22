@@ -16,6 +16,7 @@ import java.util.UUID;
 @RequestMapping(value = "${api.base.url}")
 public class AddressController {
 
+
     @Autowired
     private AddressService addressService;
 

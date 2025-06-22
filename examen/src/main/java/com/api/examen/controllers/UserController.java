@@ -4,6 +4,7 @@ import com.api.examen.entities.Address;
 import com.api.examen.entities.User;
 import com.api.examen.services.UserService;
 import com.api.examen.utils.ApiResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,8 @@ public class UserController {
         }
     }
 
-    private Comparator<User> getComparator(String sortedBy) {
+    @org.jetbrains.annotations.NotNull
+    private Comparator<User> getComparator(@NotNull String sortedBy) {
         switch (sortedBy) {
             case "name":
                 return Comparator.comparing(User::getName);
